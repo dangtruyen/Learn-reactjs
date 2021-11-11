@@ -1,5 +1,4 @@
 import axiosClient from "./axiosClient";
-
 const categoryApi = {
     getAll(params) {
         const url = '/categories';
