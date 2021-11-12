@@ -1,11 +1,26 @@
+import { useEffect } from 'react';
 import { Route, Switch } from 'react-router';
 import { NavLink } from 'react-router-dom';
+import productApi from './api/productApi';
 import './App.css';
+import NotFound from './components/NotFound';
 import AlbumFeature from './features/Album';
 import TodoFeature from './features/Todo';
-import NotFound from './components/NotFound';
 
 function App() {
+
+  useEffect(()=>{
+    const fetchProduct = async () => {
+      const params = {
+        _limit: 10,
+      }
+      const productList = await productApi.getAll(params);
+      console.log(productList);
+    }
+
+    fetchProduct();
+  }, []);
+
   return (
     <div className="App">
      <p>header</p>
