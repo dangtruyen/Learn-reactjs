@@ -3,6 +3,7 @@ import { matchPath, useHistory, useLocation, useRouteMatch } from 'react-router'
 import { useState } from 'react/cjs/react.development';
 import TodoList from '../../components/Todolist';
 import queryString from 'query-string';
+import TodoForm from '../../components/TodoForm';
 
 
 function ListPage() {
@@ -58,7 +59,7 @@ function ListPage() {
         //setFilterStatus('all')
         const queryParams = {status: 'all'};
         history.push({
-            pathname: matchPath.patch,
+            pathname: match.patch,
             search: queryString.stringify(queryParams),
         })
 
@@ -86,15 +87,31 @@ function ListPage() {
        return todoList.filter(todo => filterStatus === 'all'|| filterStatus === todo.status);
     },[todoList, filterStatus])
     //    console.log(renderTodoList);
+
+    const handleTodoFormSubmit = (values) => {
+        console.log('Form Submit:', values);
+        const newTodo = {
+            id: todoList.length + 1,
+            title: values.title,
+            status: 'new'
+        };
+        const newTodoList = [...todoList,newTodo];
+
+        setTodoList(newTodoList);
+    }
+
     return (
         <div>
-            <h3>todo list app</h3>
+
             <TodoList todoList={renderTodoList} onTodoClick={handleTodoClick} />
             <div>
                 <button onClick={handleShowAll}>show all</button>
                 <button onClick={handleShowNew}>show new</button>
                 <button onClick={handleShowCompleted}>show completed</button>
             </div>
+            
+            <h3> What to do ?</h3>
+            <TodoForm onSubmit={handleTodoFormSubmit} />
         </div>
     );
 }
