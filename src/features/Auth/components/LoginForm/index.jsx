@@ -17,54 +17,33 @@ import * as yup from 'yup';
 
 const theme = createTheme();
 
-RegisterForm.prototype = {
+LoginForm.prototype = {
   onSubmit: PropTypes.func,
 };
 const schema = yup.object({
-  fullName: yup
+  identifier: yup
     .string()
-    .required('please enter you full name.')
-    .test(
-      'Should has as least two words',
-      'Please enter as least two words',
-      (value) => {
-        console.log('value', value);
-        return value.split(' ').length >= 2;
-      }
-    ),
-  email: yup
-    .string()
-    .required('please enter you full name.')
+    .required('please enter you email.')
     .email('please enter a valid email.'),
-  password: yup
-    .string()
-    .required('please enter you password')
-    .min(2, 'Please enter as least 6 character'),
-  retypePassword: yup
-    .string()
-    .required('please enter retype password')
-    .oneOf([yup.ref('password')], 'Password dose not match'),
+  password: yup.string().required('please enter you password'),
 });
 
-function RegisterForm(props) {
+function LoginForm(props) {
   const form = useForm({
     defaultValues: {
-      fullName: '',
-      email: '',
+      identifier: '',
       password: '',
-      retypePassword: '',
     },
     resolver: yupResolver(schema),
   });
 
-  const handleSubmit = async (data, e) => {
+  const handleSubmit = async (data) => {
     const { onSubmit } = props;
     if (onSubmit) {
       await onSubmit(data);
     }
     // e.target.reset();
   };
-
   const { isSubmitting } = form.formState;
   return (
     <ThemeProvider theme={theme}>
@@ -88,7 +67,7 @@ function RegisterForm(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Create An Account
+            Sign In
           </Typography>
           <Box
             component="form"
@@ -98,17 +77,8 @@ function RegisterForm(props) {
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <InputField
-                  name="fullName"
-                  label="Full Name"
-                  form={form}
-                  autoFocus
-                />
+                <InputField name="identifier" label="Email" form={form} />
               </Grid>
-              <Grid item xs={12}>
-                <InputField name="email" label="Email" form={form} />
-              </Grid>
-
               <Grid item xs={12}>
                 <PasswordField
                   fullWidth
@@ -117,23 +87,15 @@ function RegisterForm(props) {
                   name="password"
                 />
               </Grid>
-
-              <Grid item xs={12}>
-                <PasswordField
-                  fullWidth
-                  form={form}
-                  label="Retype Password"
-                  name="retypePassword"
-                />
-              </Grid>
               <Button
                 disabled={isSubmitting}
                 type="submit"
                 color="primary"
                 variant="contained"
                 sx={{ m: [2, 2, 2], mb: 2 }}
+                onClick={form.handleSubmit}
               >
-                Create An Account
+                Sign In
               </Button>
             </Grid>
           </Box>
@@ -143,4 +105,4 @@ function RegisterForm(props) {
   );
 }
 
-export default RegisterForm;
+export default LoginForm;

@@ -1,9 +1,5 @@
-import Register from 'features/Auth/components/Register';
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import CodeIcon from '@mui/icons-material/Code';
 import CloseIcon from '@mui/icons-material/Close';
-import { makeStyles } from '@mui/styles';
+import CodeIcon from '@mui/icons-material/Code';
 import {
   AppBar,
   Box,
@@ -14,6 +10,11 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import Login from 'features/Auth/components/Login';
+import Register from 'features/Auth/components/Register';
+import React, { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -80,7 +81,7 @@ export default function Header() {
         open={open}
         onClose={(event, reason) => {
           if (reason !== 'backdropClick') {
-            handleClose(event, reason);
+            handleClose();
           }
         }}
       >
@@ -103,7 +104,8 @@ export default function Header() {
         </IconButton>
 
         <DialogContent>
-          <Register />
+          {/* <Register closeDialog={handleClose} /> */}
+          <Login closeDialog={handleClose} />
         </DialogContent>
       </Dialog>
     </Box>
