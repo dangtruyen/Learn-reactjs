@@ -1,6 +1,6 @@
-const StorageKey = {
+const StorageKeys = {
   USER: 'user',
   TOKEN: 'access_token',
 };
 
-export default StorageKey;
+export default StorageKeys;

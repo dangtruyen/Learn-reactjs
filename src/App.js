@@ -8,6 +8,7 @@ import CounterFeature from './features/Counter';
 import TodoFeature from './features/Todo';
 import { useSnackbar } from 'notistack';
 import { Button } from '@mui/material';
+import ProdusctFeature from 'features/Products';
 
 function App() {
   useEffect(() => {
@@ -34,6 +35,7 @@ function App() {
         <Route exact path="/" component={CounterFeature} />
         <Route path="/todos" component={TodoFeature} />
         <Route path="/albums" component={AlbumFeature} />
+        <Route path="/products" component={ProdusctFeature} />
 
         {/* <Route component={NotFound} /> */}
       </Switch>

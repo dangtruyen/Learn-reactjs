@@ -1,3 +1,4 @@
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import CodeIcon from '@mui/icons-material/Code';
 import {
@@ -7,13 +8,17 @@ import {
   Dialog,
   DialogContent,
   IconButton,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import Login from 'features/Auth/components/Login';
 import Register from 'features/Auth/components/Register';
+import { logout } from 'features/Auth/userSlice';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles({
@@ -45,16 +50,36 @@ const MODE = {
 };
 
 export default function Header() {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const classes = useStyles();
+  const loggedInUser = useSelector((state) => state.user.current);
+  const isLoggedIn = loggedInUser.id;
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  const [mode, setMode] = useState(MODE.REGISTER);
+  const [mode, setMode] = useState(MODE.LOGIN);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleMenuClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+  const handleLogoutClick = () => {
+    const action = logout();
+    dispatch(action);
+    handleMenuClose();
+  };
+
   return (
     <Box className={classes.root}>
       <AppBar position="static">
@@ -77,12 +102,40 @@ export default function Header() {
             <Button color="inherit">Album</Button>
           </NavLink>
 
-          <Button onClick={handleClickOpen} color="inherit">
-            Register
-          </Button>
+          {!isLoggedIn && (
+            <Button color="inherit" onClick={handleClickOpen}>
+              Login
+            </Button>
+          )}
+
+          {isLoggedIn && (
+            <IconButton color="inherit" onClick={handleMenuClick}>
+              <AccountCircleIcon />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
 
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={!!anchorEl}
+        onClose={handleMenuClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+      </Menu>
       <Dialog
         disableEscapeKeyDown
         open={open}
